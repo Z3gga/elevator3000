@@ -1,0 +1,135 @@
+int led1 = 4;
+int led2 = 5;
+int led3 = 14;
+
+int sensor1 = 4;
+int sensor2 = 5;
+int sensor3 = 6;
+
+int motorup = 7;
+int motordown = 9;
+
+int joystick = 10;
+
+bool game = true;
+
+int LVLTIME = 5000;
+int LVLMID = 2000;
+
+int lvls[6][3] = {
+{0, 0, 1},
+{0, 1, 0},
+{0, 1, 1},
+{1, 0, 0},
+{1, 0, 1},
+{1, 1, 0}
+};
+
+int leds[3] = {led1, led2, led3};
+int sensores[3] = {sensor1, sensor2, sensor3};
+
+void Leds_On() {
+  for(int i = 0; i < 3; i++) {
+    digitalWrite(leds[i], HIGH);
+  }
+}
+
+void Leds_Off() {
+  for(int i = 0; i < 3; i++) {
+    digitalWrite(leds[i], LOW);
+  }
+}
+
+void Leds_Blink() {
+  Leds_On();
+  delay(500);
+  Leds_Off();
+  delay(500);
+}
+
+bool Check(int* lvl) {
+  for (int i = 0; i < 3; i++) {
+    if (digitalRead(sensores[i]) == HIGH && lvl[i] == 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void Up() {
+  digitalWrite(motorup, HIGH);
+  digitalWrite(motordown, LOW);
+}
+
+void Down() {
+  digitalWrite(motorup, LOW);
+  digitalWrite(motordown, HIGH);
+}
+
+void Rest() {
+  digitalWrite(motorup, LOW);
+  digitalWrite(motordown, LOW);
+}
+
+void Lose() {
+  game = false;
+  Rest();
+  Leds_Blink();
+  Leds_Blink();
+  Leds_Blink();
+  Down();
+  while (digitalRead(sensor1) == LOW) {
+    delay(10);
+  }
+  Rest();
+
+  game = true;
+}
+
+void Nivel() {
+  int idx = random(0, 6);
+  int* lvl = lvls[idx];
+
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(leds[i], lvl[i] == 1 ? HIGH : LOW);
+  }
+
+  delay(LVLTIME);
+
+  if (Check(lvl)) {
+    Leds_Off();
+    delay(LVLMID);
+    Nivel();
+  } else {
+    Lose();
+    delay(LVLMID);
+    Nivel();
+  }
+}
+
+void setup() {
+  for (int i = 0; i < 3; i++) {
+    pinMode(leds[i], OUTPUT);
+    pinMode(sensores[i], INPUT);
+  }
+  pinMode(motorup, OUTPUT);
+  pinMode(motordown, OUTPUT);
+
+  pinMode(joystick, INPUT);
+
+    Nivel();
+}
+
+void loop() {
+  if (game) {
+    int joyVal = analogRead(joystick);
+  
+    if (joyVal < 400) {
+      Up();
+    } else if (joyVal > 600) {
+      Down();
+    } else {
+      Rest();
+    }
+  }
+}

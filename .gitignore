@@ -1,0 +1,13 @@
+# Versiones automáticas de Inventor
+OldVersions/
+
+# G-code (depende de cada impresora; se regenera desde los .stl)
+*.gcode
+
+# Copias de seguridad / temporales
+*.bak
+*.tmp
+
+# Sistema
+.DS_Store
+Thumbs.db
