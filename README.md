@@ -33,7 +33,7 @@ Unity/            # Pruebas de joystick/motor y esquemas (layout.png, schematic.
 Imprimir/         # Piezas listas para imprimir (.stl) y sus archivos Inventor (.ipt)
 Modelar/          # Modelos de trabajo, incluye .stl y .3mf
 Alto/, TEST.stl   # Piezas sueltas
-TRALRULIMERO TRUDRILLO.iam   # Ensamblaje en Inventor
+Ensamblaje_Elevator3000.iam  # Ensamblaje en Inventor
 ```
 
 > Los archivos `.ipt` y `.iam` son de Autodesk Inventor. Si abres el ensamblaje, mantén la estructura de carpetas para que encuentre las piezas.
